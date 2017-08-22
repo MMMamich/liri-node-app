@@ -46,6 +46,7 @@ function getTweets() {
               
               console.log("");
               console.log(tweets[i].text);
+              console.log(tweets[i].created_at);
               console.log("");
               console.log("¬¬¬¬¬¬¬¬¬¬¬¬¬");
           }
@@ -86,9 +87,28 @@ function getSongs () {
 
 function getMovies () {
    
-    var queryURL = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&tomatoes=true&apikey=40e9cece";
+    var nodeArgs = process.argv;
+
+
+        var movieName = "";
+
+        for (var i = 3; i < nodeArgs.length; i++) {
+
+          if (i > 3 && i < nodeArgs.length) {
+
+            movieName = movieName + "+" + nodeArgs[i];
+
+          }
+
+          else {
+
+            movieName += nodeArgs[i];
+
+          }
+        }
     
-    console.log(queryURL);
+    var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&tomatoes=true&apikey=40e9cece";
+    
 
     request(queryURL, function(error, response, body) {
 
@@ -100,7 +120,7 @@ function getMovies () {
             console.log("Title: " + JSON.parse(body).Title);
             console.log("Release Year: " + JSON.parse(body).Year);
             console.log("IMBD Rating: " + JSON.parse(body).imdbRating);
-            console.log("Tomato Meter: " + JSON.parse(body).tomatoRating);
+            console.log("Tomato Meter: " + JSON.parse(body).Ratings[1].Value);
             console.log("Country: " + JSON.parse(body).Country);
             console.log("Language: " + JSON.parse(body).Language);
             console.log("Plots: " + JSON.parse(body).Plot);
@@ -156,30 +176,5 @@ if (commands === "my-tweets"){
 
 
  
-//my-tweets shows last 20 tweets created in terminal
-
-//spotify-this-song '<song name here>' 
-
-// -shows in terminal:
-    // - Artist, Song Name, Preview Link of song from Spotify, album that song is from
-    //should default to Ace of Base 
-
-//movie-this shows this in terminal 
-
-//   * Title of the movie.
-//   * Year the movie came out.
-//   * IMDB Rating of the movie.
-//   * Rotten Tomatoes Rating of the movie.
-//   * Country where the movie was produced.
-//   * Language of the movie.
-//   * Plot of the movie.
-//   * Actors in the movie.
-
-    //should default to "mr.nobody"
-    //ombd api key = 40e9cece
-
-//do-what-it-says *uses fs node package* in terminal
-//LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
-
-//It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
-//Feel free to change the text in that document to test out the feature for other commands.
+ // Default to Ace Of Base - Spotify
+ // Default to Mr. Nobody - OMBD
